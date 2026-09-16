@@ -1,11 +1,6 @@
-// ============================================================================
-// src/screens/Add.js
-// ----------------------------------------------------------------------------
-// Pantalla para AGREGAR un producto nuevo. Se muestra como un "modal"
-// (ventana que aparece desde abajo) cuando el usuario toca el botón
-// "Agregar Producto" en Home.js (ver Navigation.js, donde se configura
-// presentation: 'modal').
-// ============================================================================
+// Pantalla para agregar un producto nuevo. Se muestra como modal (ventana que
+// aparece desde abajo) cuando el usuario toca "Agregar Producto" en Home.js
+// (ver Navigation.js, donde se configura presentation: 'modal').
 
 import React, { useState } from 'react';
 import {
@@ -20,108 +15,65 @@ import {
     View,
 } from 'react-native';
 
-// Hook con toda la lógica de productos (leer, agregar, borrar, etc.).
-// Acá solo usamos "addProduct".
 import useProducts from '../hooks/useProducts';
 
-// "navigation" es una prop que React Navigation le inyecta AUTOMÁTICAMENTE a
-// cualquier componente que esté declarado como Stack.Screen. Nos permite
-// movernos entre pantallas (navigate, goBack, etc.) sin tener que armar esa
-// lógica nosotros mismos.
+// navigation es una prop que React Navigation le inyecta automáticamente a
+// cualquier componente declarado como Stack.Screen, nos deja movernos entre
+// pantallas sin armar esa lógica nosotros.
 const Add = ({ navigation }) => {
-    // Estado local del formulario: lo que el usuario va escribiendo en los
-    // campos de texto, ANTES de guardarlo en Firestore.
     const [nombre, setNombre] = useState('');
     const [precio, setPrecio] = useState('');
-
-    // Solo necesitamos la función para agregar productos.
     const { addProduct } = useProducts();
 
-    // Vuelve a la pantalla anterior (Home), cerrando este modal.
     const goToHome = () => {
         navigation.goBack();
     };
 
-    // Se ejecuta cuando el usuario toca "Agregar producto".
     const agregarProducto = async () => {
         try {
-            // Llamamos a la función del hook, que habla con Firestore.
             await addProduct({
                 nombre,
-                // El input de precio guarda un STRING (todo lo que se
-                // escribe en un TextInput es texto), así que lo convertimos
-                // a número con Number(...) antes de guardarlo.
+                // El input siempre guarda texto, así que convertimos a número
+                // antes de mandarlo a Firestore.
                 precio: Number(precio),
             });
-
-            // Si todo salió bien, limpiamos el formulario...
             setNombre('');
             setPrecio('');
-
-            // ...y mostramos una alerta nativa de confirmación. Cuando el
-            // usuario toca "Ok", volvemos automáticamente a Home gracias al
-            // callback onPress: goToHome.
             Alert.alert('Producto agregado', 'El producto se agregó correctamente', [
                 { text: 'Ok', onPress: goToHome },
             ]);
         } catch (error) {
-            // Si algo falla (sin conexión, permisos de Firestore, etc.),
-            // lo registramos en consola (útil para depurar durante el
-            // desarrollo) y avisamos al usuario con una alerta.
             console.error('Error al agregar el producto', error);
             Alert.alert('Error', 'Ocurrió un error al agregar el producto. Por favor, intenta nuevamente.');
         }
     };
 
     return (
-        // KeyboardAvoidingView evita que el teclado tape los campos de
-        // texto al escribir. El comportamiento correcto varía según la
-        // plataforma:
-        // - iOS: 'padding' (empuja el contenido hacia arriba).
-        // - Android: 'height' (achica el alto disponible).
+        // KeyboardAvoidingView evita que el teclado tape los inputs al escribir.
+        // En iOS conviene 'padding' y en Android 'height'.
         <KeyboardAvoidingView
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
-            {/*
-              ScrollView permite que el contenido se pueda desplazar si no
-              entra todo en la pantalla (por ejemplo, cuando el teclado
-              ocupa la mitad de la pantalla).
-              keyboardShouldPersistTaps='handled' permite tocar botones
-              aunque el teclado esté abierto, sin que el toque se "pierda"
-              cerrando primero el teclado.
-            */}
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
                 keyboardShouldPersistTaps='handled'
             >
                 <Text style={styles.title}>Agregar producto</Text>
-
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Nombre:</Text>
                     <TextInput
                         style={styles.input}
-                        // onChangeText se ejecuta en CADA letra que el
-                        // usuario escribe; acá directamente le pasamos la
-                        // función setNombre, que actualiza el estado con el
-                        // nuevo texto completo.
                         onChangeText={setNombre}
-                        // "value" hace que este sea un input "controlado":
-                        // el TextInput siempre muestra lo que hay en el
-                        // estado "nombre", nunca un valor "propio" separado.
                         value={nombre}
                     />
                 </View>
-
                 <View style={styles.inputContainer}>
                     <Text style={styles.label}>Precio:</Text>
                     <TextInput
                         style={styles.input}
                         onChangeText={setPrecio}
                         value={precio}
-                        // Muestra el teclado numérico del celular en vez del
-                        // teclado de letras, para que sea más cómodo
-                        // escribir un precio.
                         keyboardType='numeric'
                     />
                 </View>
@@ -146,9 +98,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     scrollContent: {
-        // flexGrow (en vez de flex) permite que, aunque el contenido sea
-        // chico, siga ocupando toda la altura disponible para poder
-        // centrarlo verticalmente con justifyContent.
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
@@ -172,7 +121,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 2,
-        width: '100%',
+        width: '100%'
     },
     button: {
         backgroundColor: '#0288d1',
