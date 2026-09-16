@@ -1,108 +1,128 @@
-# Ivanya Store
+# Práctica
 
-Aplicación móvil hecha con **Expo (React Native)** y **Firebase** para gestionar
-los productos de una tienda: iniciar sesión, ver el listado de productos,
-agregar productos nuevos y marcarlos como vendidos o disponibles.
+## Tecnologías utilizadas
 
-Este proyecto está pensado como práctica/estudio de Firebase (Authentication
-y Firestore) combinado con React Native, por eso el código incluye
-comentarios detallados explicando qué hace cada parte.
-
-## Tecnologías principales
-
-- [Expo](https://expo.dev/) / React Native
-- [React Navigation](https://reactnavigation.org/) (navegación entre pantallas)
-- [Firebase](https://firebase.google.com/) — Authentication y Firestore
-- [react-native-dotenv](https://github.com/goatandsheep/react-native-dotenv) para
-  manejar variables de entorno (credenciales de Firebase)
+- Expo
+- React Native
+- React Navigation
+- Firebase Authentication
+- Firebase Firestore
+- react-native-dotenv
 
 ## Estructura del proyecto
 
-```
+```text
 .
-├── App.js                     # Componente raíz de la app
-├── index.js                   # Punto de entrada (registra App.js)
-├── app.json                   # Configuración de Expo
-├── babel.config.js            # Configuración de Babel
-├── .env.example                # Plantilla de variables de entorno
-├── assets/                    # Íconos y splash screen
+├── App.js
+├── index.js
+├── app.json
+├── babel.config.js
+├── .env.example
+├── assets/
 └── src/
     ├── config/
-    │   └── firebase.js        # Inicialización de Firebase (auth, Firestore, storage)
+    │   └── firebase.js
     ├── hooks/
-    │   ├── useAuth.js         # Lógica de login / registro / logout
-    │   └── useProducts.js     # Lógica de lectura/alta/baja de productos
+    │   ├── useAuth.js
+    │   └── useProducts.js
     ├── navigation/
-    │   └── Navigation.js      # Decide qué pantalla mostrar según la sesión
+    │   └── Navigation.js
     ├── components/
-    │   └── CardProductos.js   # Tarjeta visual de un producto
+    │   └── CardProductos.js
     └── screens/
-        ├── Auth.js            # Pantalla de login / registro
-        ├── Home.js            # Pantalla principal con el listado de productos
-        └── Add.js             # Pantalla (modal) para agregar un producto
+        ├── Auth.js
+        ├── Home.js
+        └── Add.js
 ```
 
-## Requisitos previos
+## Antes de empezar
 
-- [Node.js](https://nodejs.org/) instalado (v18 o superior recomendado).
-- La app [Expo Go](https://expo.dev/go) instalada en tu celular (para probar
-  rápido), o un emulador de Android/iOS configurado.
-- Un proyecto creado en [Firebase Console](https://console.firebase.google.com/)
-  con **Authentication** (método Email/Contraseña) y **Firestore** habilitados.
+Para poder ejecutar el proyecto necesitas tener:
 
-## Configuración
+- Node.js instalado.
+- Expo Go en el celular o un emulador de Android/iOS.
+- Un proyecto creado en Firebase.
 
-1. Instalar las dependencias:
+En Firebase debes tener habilitados:
 
-   ```bash
-   npm install
-   ```
+- Authentication con correo y contraseña.
+- Firestore.
 
-2. Crear el archivo de variables de entorno a partir de la plantilla:
+## Instalación
 
-   ```bash
-   cp .env.example .env
-   ```
-
-3. Completar `.env` con los datos de tu proyecto de Firebase (Firebase
-   Console → ⚙️ Configuración del proyecto → Tus apps → SDK setup and
-   configuration):
-
-   ```
-   API_KEY=tu_api_key
-   AUTH_DOMAIN=tu_proyecto.firebaseapp.com
-   PROJECT_ID=tu_proyecto
-   STORAGE_BUCKET=tu_proyecto.appspot.com
-   MESSAGING_SENDER_ID=tu_sender_id
-   APP_ID=tu_app_id
-   ```
-
-   > ⚠️ El archivo `.env` está en `.gitignore` y nunca se sube al repositorio.
-   > Cada persona que clona el proyecto debe crear el suyo propio.
-
-## Cómo correr el proyecto
+Primero instala las dependencias:
 
 ```bash
-npm start        # abre el menú de Expo (elegís dónde correrlo)
-npm run android  # abre directamente en un emulador/dispositivo Android
-npm run ios      # abre directamente en un simulador/dispositivo iOS
-npm run web      # abre una versión web (soporte limitado)
+npm install
+```
+
+Después crea un archivo `.env` tomando como referencia el archivo `.env.example`.
+
+```env
+API_KEY=tu_api_key
+AUTH_DOMAIN=tu_proyecto.firebaseapp.com
+PROJECT_ID=tu_proyecto
+STORAGE_BUCKET=tu_proyecto.appspot.com
+MESSAGING_SENDER_ID=tu_sender_id
+APP_ID=tu_app_id
+```
+
+Los datos se obtienen desde la configuración del proyecto en Firebase.
+
+El archivo `.env` está incluido en `.gitignore`, por lo que no se sube al repositorio.
+
+## Ejecutar el proyecto
+
+Para iniciar la aplicación:
+
+```bash
+npm start
+```
+
+También se puede ejecutar directamente en:
+
+```bash
+npm run android
+npm run ios
+npm run web
 ```
 
 ## Funcionalidades
 
-- **Autenticación**: iniciar sesión o crear una cuenta con correo y
-  contraseña (Firebase Authentication). La sesión se guarda en el
-  dispositivo, así que no hace falta loguearse cada vez que se abre la app.
-- **Listado de productos en tiempo real**: los productos se leen desde
-  Firestore usando `onSnapshot`, por lo que la lista se actualiza sola si
-  cambian los datos (sin recargar la pantalla).
-- **Agregar producto**: pantalla modal con formulario de nombre y precio.
-- **Vender / devolver producto**: cambia el estado `vendido` de un producto.
-- **Eliminar producto**: borra el producto de Firestore.
+### Inicio de sesión y registro
 
-## Notas
+Permite crear una cuenta e iniciar sesión utilizando correo y contraseña mediante Firebase Authentication.
 
-- Este repositorio fue preparado para estudio: los comentarios en el código
-  explican, paso a paso, qué hace cada línea relevante (hooks de React,
-  llamadas a Firebase, estilos, navegación, etc.).
+### Productos
+
+Muestra los productos registrados en la pantalla principal.
+
+### Agregar productos
+
+Permite agregar productos indicando su nombre y precio.
+
+### Vender productos
+
+Permite cambiar el estado de un producto entre vendido y disponible.
+
+### Eliminar productos
+
+Permite eliminar productos de Firestore.
+
+### Actualización en tiempo real
+
+Los productos se obtienen desde Firestore utilizando `onSnapshot`, por lo que los cambios se muestran automáticamente sin tener que recargar la aplicación.
+
+## Lo que practico con este proyecto
+
+Con esta práctica estoy aprendiendo a:
+
+- Utilizar Expo y React Native.
+- Manejar la navegación entre pantallas.
+- Crear formularios.
+- Utilizar hooks de React.
+- Conectar una aplicación con Firebase.
+- Utilizar Firebase Authentication.
+- Guardar y consultar información con Firestore.
+- Trabajar con información en tiempo real.
+- Utilizar variables de entorno.
